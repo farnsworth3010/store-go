@@ -11,6 +11,15 @@ type signInInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary sign in
+// @Schemes
+// @Description sign in
+// @Tags auth
+// @Param request body handler.signInInput true "query params"
+// @Accept json
+// @Produce json
+// @Success 200 {string} string "token"
+// @Router /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var input signInInput
 
@@ -30,6 +39,15 @@ func (h *Handler) signIn(c *gin.Context) {
 
 }
 
+// @Summary sign up
+// @Schemes
+// @Description sign up
+// @Tags auth
+// @Param request body models.User true "query params"
+// @Accept json
+// @Produce json
+// @Success 200 {integer} integer 1
+// @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input models.User
 

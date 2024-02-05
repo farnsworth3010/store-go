@@ -7,13 +7,18 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	store "store"
+	"store/docs"
 	"store/pkg/handler"
 	"store/pkg/repository"
 	"store/pkg/service"
 )
 
+// @BasePath /api
+
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
+
+	docs.SwaggerInfo.BasePath = "/api"
 
 	if err := initConfig(); err != nil {
 		logrus.Fatalf("Error initializing configs: %s", err.Error())
