@@ -1,5 +1,16 @@
 basePath: /api
 definitions:
+  handler.getBlogResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Blog'
+        type: array
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
   handler.signInInput:
     properties:
       password:
@@ -9,6 +20,28 @@ definitions:
     required:
     - password
     - username
+    type: object
+  models.Blog:
+    properties:
+      creation_date:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+    required:
+    - text
+    - title
+    type: object
+  models.CreateBlogParams:
+    properties:
+      text:
+        type: string
+      title:
+        type: string
+    required:
+    - text
+    - title
     type: object
   models.User:
     properties:
@@ -70,4 +103,49 @@ paths:
       summary: sign up
       tags:
       - auth
+  /blog:
+    get:
+      description: gets posts
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getBlogResponse'
+      summary: Get blog post
+      tags:
+      - blog
+    post:
+      consumes:
+      - application/json
+      description: creates post
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateBlogParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Create blog post
+      tags:
+      - blog
 swagger: "2.0"

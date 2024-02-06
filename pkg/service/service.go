@@ -12,6 +12,8 @@ type Authorization interface {
 }
 
 type Blog interface {
+	Get(page int, limit int) ([]models.Blog, int, error)
+	Create(blog models.CreateBlogParams) (int, error)
 }
 
 type Service struct {
@@ -22,5 +24,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Blog:          NewBlogService(repos.Blog),
 	}
 }

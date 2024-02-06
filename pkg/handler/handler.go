@@ -17,6 +17,7 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+	router.Use(CORSMiddleware())
 	api := router.Group("/api")
 	{
 		auth := api.Group("/auth")
@@ -24,20 +25,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			auth.POST("/sign-up", h.signUp)
 			auth.POST("/sign-in", h.signIn)
 		}
+		blog := api.Group("/blog")
+		{
+			blog.POST("/", h.createBlog)
+			blog.GET("/", h.getBlog)
+			//blog.GET("/:id")
+			//blog.PUT("/:id")
+			//blog.DELETE("/:id")
+		}
 	}
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	//api := router.Group("/api")
-	//{
-	//	blog := api.Group("/blog")
-	//	{
-	//		blog.POST("/")
-	//		blog.GET("/")
-	//		blog.GET("/:id")
-	//		blog.PUT("/:id")
-	//		blog.DELETE("/:id")
-	//	}
-	//}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router
 }

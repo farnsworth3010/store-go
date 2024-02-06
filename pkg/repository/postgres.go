@@ -26,3 +26,13 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	}
 	return db, nil
 }
+
+func CountRows(table string, db *sqlx.DB) int {
+	query := fmt.Sprintf("SELECT COUNT(*) FROM %s", table)
+	var count int
+	err := db.QueryRow(query).Scan(&count)
+	if err != nil {
+		return 0
+	}
+	return count
+}
