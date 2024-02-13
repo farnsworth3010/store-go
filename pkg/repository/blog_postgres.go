@@ -1,36 +1,35 @@
 package repository
 
 import (
-	"fmt"
-	"github.com/jmoiron/sqlx"
+	"gorm.io/gorm"
 	"store/models"
-	"strconv"
 )
 
 type BlogPostgres struct {
-	db *sqlx.DB
+	db *gorm.DB
 }
 
-func NewBlogPostgres(db *sqlx.DB) *BlogPostgres {
+func NewBlogPostgres(db *gorm.DB) *BlogPostgres {
 	return &BlogPostgres{db: db}
 }
 
-func (r *BlogPostgres) Create(blog models.CreateBlogParams) (int, error) {
-	var id int
-	query := fmt.Sprintf("INSERT INTO %s (title, text) VALUES ($1, $2) RETURNING id", blogTable)
-	row := r.db.QueryRow(query, blog.Title, blog.Text)
-	if err := row.Scan(&id); err != nil {
-		return 0, err
+func (r *BlogPostgres) Create(blog models.CreateBlogParams) (uint, error) {
+	var newBlog models.Blog = models.Blog{Title: blog.Title, Text: blog.Text}
+	res := r.db.Create(&newBlog)
+	if res.Error != nil {
+		return 0, res.Error
 	}
-	return id, nil
+	return newBlog.ID, nil
 }
 
-func (r *BlogPostgres) Get(page int, limit int) ([]models.Blog, int, error) {
+func (r *BlogPostgres) Get(page int, limit int) ([]models.Blog, int64) {
 	var blog []models.Blog
-	total := CountRows(blogTable, r.db)
+	var total int64
+	r.db.Find(&blog).Count(&total)
+	r.db.Limit(limit).Offset(page * limit).Find(&blog)
+	return blog, total
+}
 
-	query := fmt.Sprintf("SELECT * FROM %s ORDER BY creation_date DESC LIMIT "+strconv.Itoa(limit)+" OFFSET "+strconv.Itoa(limit*page), blogTable)
-	err := r.db.Select(&blog, query)
-
-	return blog, total, err
+func (r *BlogPostgres) Delete(ID uint) {
+	r.db.Delete(&models.Blog{}, ID)
 }

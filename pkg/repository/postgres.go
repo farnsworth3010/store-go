@@ -2,7 +2,9 @@ package repository
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"store/models"
 )
 
 const (
@@ -19,20 +21,15 @@ type Config struct {
 	SSLMode  string
 }
 
-func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", cfg.Host, cfg.Port, cfg.Username, cfg.Password, cfg.DBName, cfg.SSLMode))
+func NewPostgresDB(cfg Config) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", cfg.Host, cfg.Username, cfg.Password, cfg.DBName, cfg.Port, cfg.SSLMode)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	err = db.AutoMigrate(&models.User{}, &models.Blog{}, &models.Product{})
 	if err != nil {
 		return nil, err
 	}
 	return db, nil
-}
-
-func CountRows(table string, db *sqlx.DB) int {
-	query := fmt.Sprintf("SELECT COUNT(*) FROM %s", table)
-	var count int
-	err := db.QueryRow(query).Scan(&count)
-	if err != nil {
-		return 0
-	}
-	return count
 }

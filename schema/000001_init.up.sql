@@ -1,4 +1,4 @@
-CREATE TABLE users
+CREATE TABLE user
 (
     id            serial primary key,
     name          varchar(255) not null,
@@ -6,9 +6,9 @@ CREATE TABLE users
     password_hash varchar(255) not null
 );
 
-CREATE TABLE admins
+CREATE TABLE admin
 (
-    user_id int references users(id) not null
+    user_id int references user(id) not null
 );
 
 CREATE TABLE blog

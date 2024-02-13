@@ -1,10 +1,11 @@
 package models
 
+import "gorm.io/gorm"
+
 type Blog struct {
-	Id            int    `json:"-" db:"id"`
-	Title         string `json:"title" binding:"required"`
-	Text          string `json:"text" binding:"required"`
-	Creation_Date string `json:"creation_date"`
+	gorm.Model
+	Title string `json:"title" binding:"required"`
+	Text  string `json:"text" binding:"required"`
 }
 
 type CreateBlogParams struct {

@@ -20,18 +20,25 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.Use(CORSMiddleware())
 	api := router.Group("/api")
 	{
-		auth := api.Group("/auth")
-		{
-			auth.POST("/sign-up", h.signUp)
-			auth.POST("/sign-in", h.signIn)
-		}
+		//auth := api.Group("/auth")
+		//{
+		//	//auth.POST("/sign-up", h.signUp)
+		//	//auth.POST("/sign-in", h.signIn)
+		//}
 		blog := api.Group("/blog")
 		{
 			blog.POST("/", h.createBlog)
 			blog.GET("/", h.getBlog)
 			//blog.GET("/:id")
 			//blog.PUT("/:id")
-			//blog.DELETE("/:id")
+			blog.DELETE("/:id", h.deleteBlog)
+		}
+		product := api.Group("/product")
+		{
+			product.POST("/", h.createProduct)
+			product.GET("/latest", h.getLatestProduct)
+			product.GET("/", h.getProduct)
+			//product.DELETE("/:id", h.deleteProduct)
 		}
 	}
 
