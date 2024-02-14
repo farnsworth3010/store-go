@@ -19,6 +19,7 @@ type Blog interface {
 
 type Product interface {
 	Get(page int, limit int) ([]models.Product, int64)
+	GetById(ID uint) models.Product
 	Latest() []models.Product
 	Create(product models.Product) (uint, error)
 	Delete(ID uint)

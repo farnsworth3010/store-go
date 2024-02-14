@@ -38,6 +38,11 @@ func (r *ProductPostgres) Get(page int, limit int) ([]models.Product, int64) {
 	r.db.Limit(limit).Offset(page * limit).Find(&product)
 	return product, total
 }
+func (r *ProductPostgres) GetById(id uint) models.Product {
+	var product models.Product
+	r.db.Find(&product, id)
+	return product
+}
 
 func (r *ProductPostgres) Delete(ID uint) {
 	r.db.Delete(&models.Product{}, ID)

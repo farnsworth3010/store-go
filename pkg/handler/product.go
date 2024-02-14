@@ -76,3 +76,12 @@ func (h *Handler) deleteProduct(c *gin.Context) {
 	}
 	h.services.Product.Delete(uint(ID))
 }
+
+func (h *Handler) getProductById(c *gin.Context) {
+	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, "id type conversion error")
+	}
+	product := h.services.Product.GetById(uint(ID))
+	c.JSON(http.StatusOK, product)
+}

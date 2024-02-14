@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -35,7 +36,7 @@ func main() {
 		DBName:   viper.GetString("db.dbname"),
 		SSLMode:  viper.GetString("db.sslmode"),
 	})
-
+	fmt.Println(viper.GetString("db.host") + ":" + viper.GetString("port") + "\n")
 	if err != nil {
 		logrus.Fatalf("Error while initializing db: %s", err.Error())
 	}

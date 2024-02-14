@@ -27,3 +27,7 @@ func (s *ProductService) Delete(ID uint) {
 func (s *ProductService) Latest() []models.Product {
 	return s.repo.Latest()
 }
+
+func (s *ProductService) GetById(id uint) models.Product {
+	return s.repo.GetById(id)
+}

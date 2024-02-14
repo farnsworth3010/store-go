@@ -16,7 +16,8 @@ func NewHandler(services *service.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	router := gin.New()
+	router := gin.Default()
+	router.Static("/images", "images")
 	router.Use(CORSMiddleware())
 	api := router.Group("/api")
 	{
@@ -36,8 +37,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		product := api.Group("/product")
 		{
 			product.POST("/", h.createProduct)
-			product.GET("/latest", h.getLatestProduct)
 			product.GET("/", h.getProduct)
+			product.GET("/:id", h.getProductById)
+			product.GET("/latest", h.getLatestProduct)
 			//product.DELETE("/:id", h.deleteProduct)
 		}
 	}
