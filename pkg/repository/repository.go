@@ -5,10 +5,11 @@ import (
 	"store/models"
 )
 
-//type Authorization interface {
-//	CreateUser(user models.User) (int, error)
-//	GetUser(username, password string) (models.User, error)
-//}
+type Authorization interface {
+	CreateUser(user models.User) (uint, error)
+	GetUser(email, password string) (models.User, error)
+	GetUserInfo(ID uint) (models.User, error)
+}
 
 type Blog interface {
 	Get(page int, limit int) ([]models.Blog, int64)
@@ -25,14 +26,11 @@ type Product interface {
 }
 
 type Repository struct {
-	//Authorization
+	Authorization
 	Product
 	Blog
 }
 
-//	func NewRepository(db *gorm.DB) *Repository {
-//		return &Repository{Authorization: NewAuthPostgres(db), Blog: NewBlogPostgres(db)}
-//	}
 func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{Blog: NewBlogPostgres(db), Product: NewProductPostgres(db)}
+	return &Repository{Blog: NewBlogPostgres(db), Product: NewProductPostgres(db), Authorization: NewAuthPostgres(db)}
 }

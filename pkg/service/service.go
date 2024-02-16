@@ -5,11 +5,12 @@ import (
 	"store/pkg/repository"
 )
 
-//type Authorization interface {
-//	CreateUser(user models.User) (int, error)
-//	GenerateToken(username string, password string) (string, error)
-//	ParseToken(token string) (int, error)
-//}
+type Authorization interface {
+	CreateUser(user models.User) (uint, error)
+	GenerateToken(username string, password string) (string, error)
+	ParseToken(token string) (int, error)
+	GetUserInfo(token string) (models.User, error)
+}
 
 type Blog interface {
 	Get(page int, limit int) ([]models.Blog, int64)
@@ -26,15 +27,15 @@ type Product interface {
 }
 
 type Service struct {
-	//Authorization
+	Authorization
 	Product
 	Blog
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		//Authorization: NewAuthService(repos.Authorization),
-		Blog:    NewBlogService(repos.Blog),
-		Product: NewProductService(repos.Product),
+		Authorization: NewAuthService(repos.Authorization),
+		Blog:          NewBlogService(repos.Blog),
+		Product:       NewProductService(repos.Product),
 	}
 }

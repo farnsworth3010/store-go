@@ -2,6 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
+	"store/models"
 )
 
 type AuthPostgres struct {
@@ -12,19 +13,29 @@ func NewAuthPostgres(db *gorm.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
-//func (r *AuthPostgres) CreateUser(user models.User) (int, error) {
-//	var id int
-//	query := fmt.Sprintf("INSERT INTO %s (name, username, password_hash) values ($1, $2, $3) RETURNING id", usersTable)
-//	row := r.db.QueryRow(query, user.Name, user.Username, user.Password)
-//	if err := row.Scan(&id); err != nil {
-//		return 0, err
-//	}
-//	return id, nil
-//}
-//
-//func (r *AuthPostgres) GetUser(username string, password string) (models.User, error) {
-//	var user models.User
-//	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
-//	err := r.db.Get(&user, query, username, password)
-//	return user, err
-//}
+func (r *AuthPostgres) CreateUser(user models.User) (uint, error) {
+	var newUser models.User = models.User{Email: user.Email, Firstname: user.Firstname, Password: user.Password, PhoneNumber: user.PhoneNumber}
+	res := r.db.Create(&newUser)
+	// FIX INFINITE REG
+	if res.Error != nil {
+		return 0, res.Error
+	}
+	return newUser.ID, nil
+}
+
+func (r *AuthPostgres) GetUser(email string, password string) (models.User, error) {
+	var user models.User
+	res := r.db.Where("email=? AND password=?", email, password).First(&user)
+	if res.Error != nil {
+		return user, res.Error
+	}
+	return user, res.Error
+}
+func (r *AuthPostgres) GetUserInfo(ID uint) (models.User, error) {
+	var user models.User
+	res := r.db.Find(&user, ID)
+	if res.Error != nil {
+		return user, res.Error
+	}
+	return user, res.Error
+}
