@@ -31,3 +31,19 @@ func (s *ProductService) Latest() []models.Product {
 func (s *ProductService) GetById(id uint) models.Product {
 	return s.repo.GetById(id)
 }
+
+func (s *ProductService) GetCategories() ([]models.Category, error) {
+	return s.repo.GetCategories()
+}
+func (s *ProductService) UpdateCategory(ID uint, newName string) error {
+	return s.repo.UpdateCategory(ID, newName)
+}
+func (s *ProductService) DeleteCategory(ID uint) error {
+	return s.repo.DeleteCategory(ID)
+}
+func (s *ProductService) AddCategory(name string) (uint, error) {
+	return s.repo.AddCategory(name)
+}
+func (s *ProductService) GetByName(name string) ([]models.Product, error) {
+	return s.repo.GetByName(name)
+}

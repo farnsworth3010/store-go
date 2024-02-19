@@ -16,3 +16,7 @@ type Product struct {
 	Sizes            pq.StringArray `json:"sizes" gorm:"type:varchar(20)[]"`
 	Composition      pq.StringArray `json:"composition" gorm:"type:varchar(20)[]"`
 }
+
+type SearchProductInput struct {
+	Name string `json:"name" binding:"required"`
+}

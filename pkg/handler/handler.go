@@ -39,9 +39,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			product.POST("/", h.createProduct)
 			product.GET("/", h.getProduct)
+			product.POST("/search", h.getProductsByName)
 			product.GET("/:id", h.getProductById)
 			product.GET("/latest", h.getLatestProduct)
 			//product.DELETE("/:id", h.deleteProduct)
+		}
+		categories := api.Group("/categories")
+		{
+			categories.GET("/", h.getCategories)
+			categories.POST("/", h.addCategory)
+			categories.PATCH("/", h.updateCategory)
+			categories.DELETE("/", h.deleteCategory)
 		}
 	}
 

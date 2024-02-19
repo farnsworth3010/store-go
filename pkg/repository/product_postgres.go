@@ -53,3 +53,49 @@ func (r *ProductPostgres) Latest() []models.Product {
 	r.db.Order("created_at").Limit(5).Find(&product)
 	return product
 }
+
+func (r *ProductPostgres) GetCategories() ([]models.Category, error) {
+	var categories []models.Category
+	res := r.db.Find(&categories)
+	if res.Error != nil {
+		return categories, res.Error
+	}
+	return categories, nil
+}
+
+func (r *ProductPostgres) UpdateCategory(ID uint, newName string) error {
+	res := r.db.Model(&models.Category{
+		Model: gorm.Model{ID: ID},
+	}).Update("name", newName)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
+
+func (r *ProductPostgres) DeleteCategory(ID uint) error {
+	res := r.db.Delete(&models.Category{}, ID)
+	if res.Error != nil {
+		return res.Error
+	}
+	return res.Error
+}
+
+func (r *ProductPostgres) AddCategory(name string) (uint, error) {
+	var newCategory = models.Category{
+		Name: name,
+	}
+	res := r.db.Create(&newCategory)
+	if res.Error != nil {
+		return 0, res.Error
+	}
+	return newCategory.ID, nil
+}
+func (r *ProductPostgres) GetByName(name string) ([]models.Product, error) {
+	var product []models.Product
+	res := r.db.Where("title LIKE '%" + name + "%'").Find(&product) // CHECK FOR SQL INJECTION!!!
+	if res.Error != nil {
+		return product, res.Error
+	}
+	return product, nil
+}

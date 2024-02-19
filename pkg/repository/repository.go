@@ -23,6 +23,11 @@ type Product interface {
 	Latest() []models.Product
 	Create(product models.Product) (uint, error)
 	Delete(ID uint)
+	GetCategories() ([]models.Category, error)
+	UpdateCategory(ID uint, newName string) error
+	DeleteCategory(ID uint) error
+	AddCategory(name string) (uint, error)
+	GetByName(name string) ([]models.Product, error)
 }
 
 type Repository struct {
