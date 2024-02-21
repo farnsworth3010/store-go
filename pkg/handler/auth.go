@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"store/models"
+	"strings"
 )
 
 type signInInput struct {
@@ -71,13 +72,28 @@ func (h *Handler) signUp(c *gin.Context) {
 }
 
 func (h *Handler) getUserInfo(c *gin.Context) {
-	var input GetUserInfoInput
 
-	if err := c.BindJSON(&input); err != nil {
-		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+	//
+	header := c.GetHeader(authorizationHeader)
+
+	if header == "" {
+		NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
-	user, err := h.services.Authorization.GetUserInfo(input.Token)
+
+	headerParts := strings.Split(header, " ")
+	if len(headerParts) != 2 {
+		NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	userId, err := h.services.Authorization.ParseToken(headerParts[1])
+	if err != nil {
+		NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	user, err := h.services.Authorization.GetUserInfo(uint(userId))
 	if err != nil {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

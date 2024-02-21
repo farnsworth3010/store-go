@@ -9,7 +9,7 @@ type Authorization interface {
 	CreateUser(user models.User) (uint, error)
 	GenerateToken(username string, password string) (string, error)
 	ParseToken(token string) (int, error)
-	GetUserInfo(token string) (models.User, error)
+	GetUserInfo(ID uint) (models.User, error)
 }
 
 type Blog interface {

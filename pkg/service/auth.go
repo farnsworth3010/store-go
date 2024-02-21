@@ -74,10 +74,6 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 	return claims.UserId, nil
 }
 
-func (s *AuthService) GetUserInfo(token string) (models.User, error) {
-	ID, err := s.ParseToken(token)
-	if err != nil {
-		return models.User{}, err
-	}
-	return s.repo.GetUserInfo(uint(ID))
+func (s *AuthService) GetUserInfo(ID uint) (models.User, error) {
+	return s.repo.GetUserInfo(ID)
 }
