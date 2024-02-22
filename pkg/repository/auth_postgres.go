@@ -39,3 +39,11 @@ func (r *AuthPostgres) GetUserInfo(ID uint) (models.User, error) {
 	}
 	return user, res.Error
 }
+
+func (r *AuthPostgres) DeleteUser(ID uint) error {
+	res := r.db.Delete(&models.User{}, ID)
+	if res != nil {
+		return res.Error
+	}
+	return nil
+}

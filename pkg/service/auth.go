@@ -77,3 +77,7 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 func (s *AuthService) GetUserInfo(ID uint) (models.User, error) {
 	return s.repo.GetUserInfo(ID)
 }
+
+func (s *AuthService) DeleteUser(ID uint) error {
+	return s.repo.DeleteUser(ID)
+}

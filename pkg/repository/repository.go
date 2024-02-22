@@ -9,6 +9,7 @@ type Authorization interface {
 	CreateUser(user models.User) (uint, error)
 	GetUser(email, password string) (models.User, error)
 	GetUserInfo(ID uint) (models.User, error)
+	DeleteUser(ID uint) error
 }
 
 type Blog interface {

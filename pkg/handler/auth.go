@@ -100,3 +100,31 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, user)
 }
+
+func (h *Handler) deleteUser(c *gin.Context) {
+	header := c.GetHeader(authorizationHeader)
+
+	if header == "" {
+		NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	headerParts := strings.Split(header, " ")
+	if len(headerParts) != 2 {
+		NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	userId, err := h.services.Authorization.ParseToken(headerParts[1])
+	if err != nil {
+		NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	err = h.services.Authorization.DeleteUser(uint(userId))
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, nil)
+}

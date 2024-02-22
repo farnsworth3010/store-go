@@ -27,7 +27,7 @@ func NewPostgresDB(cfg Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&models.User{}, &models.Blog{}, &models.Product{}, &models.Category{})
+	err = db.AutoMigrate(&models.User{}, &models.Blog{}, &models.Product{}, &models.Category{}, &models.Role{})
 	if err != nil {
 		return nil, err
 	}

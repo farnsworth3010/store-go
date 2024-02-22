@@ -25,31 +25,32 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			auth.POST("/sign-up", h.signUp)
 			auth.POST("/sign-in", h.signIn)
+			auth.DELETE("/", h.userIdentity, h.deleteUser)
 			auth.GET("/info", h.userIdentity, h.getUserInfo)
 		}
 		blog := api.Group("/blog")
 		{
-			blog.POST("/", h.createBlog)
+			blog.POST("/", h.userIdentity, h.createBlog)
 			blog.GET("/", h.getBlog)
 			//blog.GET("/:id")
 			//blog.PUT("/:id")
-			blog.DELETE("/:id", h.deleteBlog)
+			blog.DELETE("/:id", h.userIdentity, h.deleteBlog)
 		}
 		product := api.Group("/product")
 		{
-			product.POST("/", h.createProduct)
+			product.POST("/", h.userIdentity, h.createProduct)
+			product.POST("/search", h.userIdentity, h.getProductsByName)
 			product.GET("/", h.getProduct)
-			product.POST("/search", h.getProductsByName)
 			product.GET("/:id", h.getProductById)
 			product.GET("/latest", h.getLatestProduct)
 			//product.DELETE("/:id", h.deleteProduct)
 		}
 		categories := api.Group("/categories")
 		{
+			categories.POST("/", h.userIdentity, h.addCategory)
+			categories.PATCH("/", h.userIdentity, h.updateCategory)
+			categories.DELETE("/", h.userIdentity, h.deleteCategory)
 			categories.GET("/", h.getCategories)
-			categories.POST("/", h.addCategory)
-			categories.PATCH("/", h.updateCategory)
-			categories.DELETE("/", h.deleteCategory)
 		}
 	}
 
