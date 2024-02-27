@@ -4,10 +4,11 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"store/models"
 	"store/pkg/repository"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 const (

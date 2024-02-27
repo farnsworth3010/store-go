@@ -32,10 +32,18 @@ type Product interface {
 	GetByName(name string) ([]models.Product, error)
 }
 
+type Panel interface {
+	GetAdmins() ([]models.Admin, error)
+	GetUsers() ([]models.ShortUser, error)
+	GetBlogs() ([]models.ShortBlog, error)
+	SetRole(ID uint, RoleID uint) error
+}
+
 type Service struct {
 	Authorization
-	Product
 	Blog
+	Panel
+	Product
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -43,5 +51,6 @@ func NewService(repos *repository.Repository) *Service {
 		Authorization: NewAuthService(repos.Authorization),
 		Blog:          NewBlogService(repos.Blog),
 		Product:       NewProductService(repos.Product),
+		Panel:         NewPanelService(repos.Panel),
 	}
 }

@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"store/models"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type signInInput struct {

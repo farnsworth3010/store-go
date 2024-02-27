@@ -2,14 +2,10 @@ package repository
 
 import (
 	"fmt"
+	"store/models"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"store/models"
-)
-
-const (
-	blogTable  = "blog"
-	usersTable = "users"
 )
 
 type Config struct {
@@ -24,10 +20,13 @@ type Config struct {
 func NewPostgresDB(cfg Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", cfg.Host, cfg.Username, cfg.Password, cfg.DBName, cfg.Port, cfg.SSLMode)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&models.User{}, &models.Blog{}, &models.Product{}, &models.Category{}, &models.Role{})
+
+	err = db.AutoMigrate(&models.User{}, &models.Blog{}, &models.Product{}, &models.Category{}, &models.Role{}, &models.Subcategory{})
+
 	if err != nil {
 		return nil, err
 	}

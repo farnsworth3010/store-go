@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"store/models"
+
+	"gorm.io/gorm"
 )
 
 type Authorization interface {
@@ -31,12 +32,20 @@ type Product interface {
 	GetByName(name string) ([]models.Product, error)
 }
 
+type Panel interface {
+	GetAdmins() ([]models.Admin, error)
+	GetUsers() ([]models.ShortUser, error)
+	GetBlogs() ([]models.ShortBlog, error)
+	SetRole(ID uint, RoleID uint) error
+}
+
 type Repository struct {
 	Authorization
-	Product
 	Blog
+	Panel
+	Product
 }
 
 func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{Blog: NewBlogPostgres(db), Product: NewProductPostgres(db), Authorization: NewAuthPostgres(db)}
+	return &Repository{Blog: NewBlogPostgres(db), Product: NewProductPostgres(db), Authorization: NewAuthPostgres(db), Panel: NewPanelPostgres(db)}
 }

@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"store/models"
+
+	"gorm.io/gorm"
 )
 
 type ProductPostgres struct {
@@ -91,9 +92,10 @@ func (r *ProductPostgres) AddCategory(name string) (uint, error) {
 	}
 	return newCategory.ID, nil
 }
+
 func (r *ProductPostgres) GetByName(name string) ([]models.Product, error) {
 	var product []models.Product
-	res := r.db.Where("title LIKE '%" + name + "%'").Find(&product) // CHECK FOR SQL INJECTION!!!
+	res := r.db.Where("title LIKE ?", "%"+name+"%").Find(&product)
 	if res.Error != nil {
 		return product, res.Error
 	}

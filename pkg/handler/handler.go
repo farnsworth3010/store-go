@@ -1,10 +1,11 @@
 package handler
 
 import (
+	"store/pkg/service"
+
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"store/pkg/service"
 )
 
 type Handler struct {
@@ -43,7 +44,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			product.GET("/", h.getProduct)
 			product.GET("/:id", h.getProductById)
 			product.GET("/latest", h.getLatestProduct)
-			//product.DELETE("/:id", h.deleteProduct)
+			product.DELETE("/:id", h.userIdentity, h.deleteProduct)
 		}
 		categories := api.Group("/categories")
 		{
@@ -51,6 +52,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			categories.PATCH("/", h.userIdentity, h.updateCategory)
 			categories.DELETE("/", h.userIdentity, h.deleteCategory)
 			categories.GET("/", h.getCategories)
+		}
+		admin := api.Group("/panel")
+		{
+			admin.GET("/admins", h.userIdentity, h.getAdmins)
+			admin.GET("/users", h.userIdentity, h.getUsers)
+			admin.GET("/blogs", h.userIdentity, h.getBlogs)
+			admin.POST("/setRole", h.userIdentity, h.setRole)
 		}
 	}
 
