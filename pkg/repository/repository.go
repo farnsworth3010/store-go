@@ -30,6 +30,7 @@ type Product interface {
 	DeleteCategory(ID uint) error
 	AddCategory(name string) (uint, error)
 	GetByName(name string) ([]models.Product, error)
+	GetBrands() ([]models.Brand, error)
 }
 
 type Panel interface {

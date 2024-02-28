@@ -47,3 +47,7 @@ func (s *ProductService) AddCategory(name string) (uint, error) {
 func (s *ProductService) GetByName(name string) ([]models.Product, error) {
 	return s.repo.GetByName(name)
 }
+
+func (s *ProductService) GetBrands() ([]models.Brand, error) {
+	return s.repo.GetBrands()
+}

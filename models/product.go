@@ -12,10 +12,12 @@ type Product struct {
 	Description      string         `json:"description" binding:"required"`
 	ShortDescription string         `json:"short_description" binding:"required"`
 	Images           pq.StringArray `json:"images" gorm:"type:text[]"`
-	Colors           pq.StringArray `json:"colors" gorm:"type:varchar(20)[]" binding:"required"`
+	Colors           pq.StringArray `json:"colors" gorm:"type:varchar(20)[]"`
 	Sizes            pq.StringArray `json:"sizes" gorm:"type:varchar(20)[]"`
 	Composition      pq.StringArray `json:"composition" gorm:"type:varchar(20)[]"`
 	Subcategories    []Subcategory  `gorm:"many2many:product_subcategories;"`
+	BrandID          int            `json:"brand_id" binding:"required"`
+	Brand            Brand
 }
 
 type SearchProductInput struct {

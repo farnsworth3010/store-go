@@ -24,6 +24,7 @@ func (r *ProductPostgres) Create(product models.Product) (uint, error) {
 		Colors:           product.Colors,
 		Sizes:            product.Sizes,
 		Composition:      product.Composition,
+		BrandID:          product.BrandID,
 	}
 	res := r.db.Create(&newProduct)
 	if res.Error != nil {
@@ -100,4 +101,12 @@ func (r *ProductPostgres) GetByName(name string) ([]models.Product, error) {
 		return product, res.Error
 	}
 	return product, nil
+}
+func (r *ProductPostgres) GetBrands() ([]models.Brand, error) {
+	var brands []models.Brand
+	res := r.db.Find(&brands)
+	if res.Error != nil {
+		return brands, res.Error
+	}
+	return brands, nil
 }

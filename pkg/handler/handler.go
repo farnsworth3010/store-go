@@ -39,6 +39,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		product := api.Group("/product")
 		{
+			product.GET("/brands", h.getBrands)
 			product.POST("/", h.userIdentity, h.createProduct)
 			product.POST("/search", h.userIdentity, h.getProductsByName)
 			product.GET("/", h.getProduct)

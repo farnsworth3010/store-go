@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"store/models"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type getProductResponse struct {
@@ -151,4 +152,15 @@ func (h *Handler) deleteCategory(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+}
+
+func (h *Handler) getBrands(c *gin.Context) {
+	brands, err := h.services.Product.GetBrands()
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"data": brands,
+	})
 }
