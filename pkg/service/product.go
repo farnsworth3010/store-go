@@ -51,3 +51,7 @@ func (s *ProductService) GetByName(name string) ([]models.Product, error) {
 func (s *ProductService) GetBrands() ([]models.Brand, error) {
 	return s.repo.GetBrands()
 }
+
+func (s *ProductService) Update(product models.Product) error {
+	return s.repo.Update(product)
+}

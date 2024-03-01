@@ -25,6 +25,7 @@ type Product interface {
 	Latest() []models.Product
 	Create(product models.Product) (uint, error)
 	Delete(ID uint)
+	Update(product models.Product) error
 	GetCategories() ([]models.Category, error)
 	UpdateCategory(ID uint, newName string) error
 	DeleteCategory(ID uint) error

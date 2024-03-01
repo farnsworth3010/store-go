@@ -110,3 +110,11 @@ func (r *ProductPostgres) GetBrands() ([]models.Brand, error) {
 	}
 	return brands, nil
 }
+
+func (r *ProductPostgres) Update(product models.Product) error {
+	res := r.db.Model(&models.Product{}).Where("id = ?", product.ID).Updates(&models.Product{Title: product.Title, Price: product.Price, Description: product.Description, ShortDescription: product.ShortDescription, Images: product.Images, Colors: product.Colors, Sizes: product.Sizes, Composition: product.Composition, BrandID: product.BrandID})
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}

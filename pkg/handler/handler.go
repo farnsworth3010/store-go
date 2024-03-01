@@ -41,6 +41,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			product.GET("/brands", h.getBrands)
 			product.POST("/", h.userIdentity, h.createProduct)
+			product.PATCH("/", h.userIdentity, h.updateProduct)
 			product.POST("/search", h.userIdentity, h.getProductsByName)
 			product.GET("/", h.getProduct)
 			product.GET("/:id", h.getProductById)

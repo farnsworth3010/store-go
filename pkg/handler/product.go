@@ -164,3 +164,20 @@ func (h *Handler) getBrands(c *gin.Context) {
 		"data": brands,
 	})
 }
+
+func (h *Handler) updateProduct(c *gin.Context) {
+	var input models.Product
+
+	if err := c.BindJSON(&input); err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	err := h.services.Product.Update(input)
+
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}

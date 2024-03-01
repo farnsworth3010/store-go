@@ -31,6 +31,7 @@ type Product interface {
 	AddCategory(name string) (uint, error)
 	GetByName(name string) ([]models.Product, error)
 	GetBrands() ([]models.Brand, error)
+	Update(product models.Product) error
 }
 
 type Panel interface {
