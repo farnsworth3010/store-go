@@ -34,12 +34,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			blog.POST("/", h.userIdentity, h.createBlog)
 			blog.GET("/", h.getBlog)
 			//blog.GET("/:id")
-			//blog.PUT("/:id")
+			blog.PATCH("/", h.userIdentity, h.updateBlog)
 			blog.DELETE("/:id", h.userIdentity, h.deleteBlog)
 		}
 		product := api.Group("/product")
 		{
 			product.GET("/brands", h.getBrands)
+			product.POST("/filter", h.filterProducts)
 			product.POST("/", h.userIdentity, h.createProduct)
 			product.PATCH("/", h.userIdentity, h.updateProduct)
 			product.POST("/search", h.userIdentity, h.getProductsByName)

@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"store/models"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type getBlogResponse struct {
@@ -88,4 +89,19 @@ func (h *Handler) deleteBlog(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, "id type conversion error")
 	}
 	h.services.Blog.Delete(uint(ID))
+}
+
+func (h *Handler) updateBlog(c *gin.Context) {
+	var input models.EditBlogParams
+
+	if err := c.BindJSON(&input); err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	err := h.services.Blog.Update(input)
+
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 }

@@ -16,6 +16,9 @@ func NewBlogService(repo repository.Blog) *BlogService {
 func (s *BlogService) Create(blog models.CreateBlogParams) (uint, error) {
 	return s.repo.Create(blog)
 }
+func (s *BlogService) Update(blog models.EditBlogParams) error {
+	return s.repo.Update(blog)
+}
 
 func (s *BlogService) Get(page int, limit int) ([]models.Blog, int64) {
 	return s.repo.Get(page, limit)

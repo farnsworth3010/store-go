@@ -181,3 +181,14 @@ func (h *Handler) updateProduct(c *gin.Context) {
 
 	c.JSON(http.StatusOK, nil)
 }
+
+func (h *Handler) filterProducts(c *gin.Context) {
+	var input models.ProductFilters
+
+	if err := c.BindJSON(&input); err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	products, total := h.services.Product.Filter(input, 0, 30) // FIX
+	c.JSON(http.StatusOK, getProductResponse{Data: products, Page: 0, Total: total})
+}

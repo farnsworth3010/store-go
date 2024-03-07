@@ -17,6 +17,7 @@ type Blog interface {
 	Get(page int, limit int) ([]models.Blog, int64)
 	Create(blog models.CreateBlogParams) (uint, error)
 	Delete(ID uint)
+	Update(blog models.EditBlogParams) error
 }
 
 type Product interface {
@@ -32,6 +33,7 @@ type Product interface {
 	GetByName(name string) ([]models.Product, error)
 	GetBrands() ([]models.Brand, error)
 	Update(product models.Product) error
+	Filter(filters models.ProductFilters, page int, limit int) ([]models.Product, int64)
 }
 
 type Panel interface {

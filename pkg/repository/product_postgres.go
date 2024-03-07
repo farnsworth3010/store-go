@@ -118,3 +118,32 @@ func (r *ProductPostgres) Update(product models.Product) error {
 	}
 	return nil
 }
+
+func BrandFilter(brand_id int) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if brand_id != 0 {
+			return db.Where("brand_id = ?", brand_id)
+		}
+		return db
+	}
+}
+
+func TitleFilter(title string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if title != "" {
+			return db.Where("title LIKE ?", "%"+title+"%")
+		}
+		return db
+	}
+}
+
+func (r *ProductPostgres) Filter(filters models.ProductFilters, page int, limit int) ([]models.Product, int64) {
+	var products []models.Product
+	var total int64
+
+	r.db.Scopes(TitleFilter(filters.Title), BrandFilter(filters.BrandID)).Find(&products).Limit(limit).Offset(page * limit)
+
+	r.db.Find(&models.Product{}).Count(&total)
+
+	return products, total
+}

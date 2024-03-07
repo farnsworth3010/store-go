@@ -16,6 +16,7 @@ type Authorization interface {
 type Blog interface {
 	Get(page int, limit int) ([]models.Blog, int64)
 	Create(blog models.CreateBlogParams) (uint, error)
+	Update(blog models.EditBlogParams) error
 	Delete(ID uint)
 }
 
@@ -32,6 +33,7 @@ type Product interface {
 	AddCategory(name string) (uint, error)
 	GetByName(name string) ([]models.Product, error)
 	GetBrands() ([]models.Brand, error)
+	Filter(filters models.ProductFilters, page int, limit int) ([]models.Product, int64)
 }
 
 type Panel interface {

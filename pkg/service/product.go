@@ -55,3 +55,7 @@ func (s *ProductService) GetBrands() ([]models.Brand, error) {
 func (s *ProductService) Update(product models.Product) error {
 	return s.repo.Update(product)
 }
+
+func (s *ProductService) Filter(filters models.ProductFilters, page int, limit int) ([]models.Product, int64) {
+	return s.repo.Filter(filters, page, limit)
+}

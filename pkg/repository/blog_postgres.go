@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"store/models"
+
+	"gorm.io/gorm"
 )
 
 type BlogPostgres struct {
@@ -20,6 +21,15 @@ func (r *BlogPostgres) Create(blog models.CreateBlogParams) (uint, error) {
 		return 0, res.Error
 	}
 	return newBlog.ID, nil
+}
+
+func (r *BlogPostgres) Update(blog models.EditBlogParams) error {
+	var newBlog models.Blog = models.Blog{Title: blog.Title, Text: blog.Text}
+	res := r.db.Model(&models.Blog{}).Where("id = ?", blog.ID).Updates(&newBlog)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
 }
 
 func (r *BlogPostgres) Get(page int, limit int) ([]models.Blog, int64) {

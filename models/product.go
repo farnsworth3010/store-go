@@ -20,6 +20,12 @@ type Product struct {
 	Brand            Brand
 }
 
+type ProductFilters struct {
+	Title   string `json:"title"`
+	Price   int    `json:"price"`
+	BrandID int    `json:"brand_id"`
+}
+
 type SearchProductInput struct {
 	Name string `json:"name" binding:"required"`
 }
