@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+	"encoding/json"
 	"store/models"
 
 	"gorm.io/gorm"
@@ -56,13 +58,32 @@ func (r *ProductPostgres) Latest() []models.Product {
 	return product
 }
 
-func (r *ProductPostgres) GetCategories() ([]models.Category, error) {
-	var categories []models.Category
-	res := r.db.Find(&categories)
-	if res.Error != nil {
-		return categories, res.Error
+func (r *ProductPostgres) GetCategories() ([]models.CategoryResponse, error) {
+	var categories []models.CategoryResponse
+
+	rows, err := r.db.Raw("SELECT categories.id as category_id, categories.name AS category_name, json_agg(json_build_object('id', subcategories.id, 'name', subcategories.name)) as subcategories FROM categories LEFT JOIN subcategories ON categories.id=subcategories.category_id GROUP BY categories.id, categories.name").Rows()
+	if err != nil {
+		return nil, err
 	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var category models.CategoryResponse
+		var subcategoriesJSON sql.RawBytes
+		if err := rows.Scan(&category.Id, &category.CategoryName, &subcategoriesJSON); err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal(subcategoriesJSON, &category.Subcategories); err != nil {
+			return nil, err
+		}
+		categories = append(categories, category)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return categories, nil
+
 }
 
 func (r *ProductPostgres) UpdateCategory(ID uint, newName string) error {
@@ -137,13 +158,31 @@ func TitleFilter(title string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
+func SortFilter(criterion int) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		switch criterion {
+		case 1:
+			return db
+		case 2:
+			return db.Order("price ASC")
+		case 3:
+			return db.Order("price DESC")
+		case 4:
+			return db.Order("created_at DESC")
+		default:
+			return db
+		}
+	}
+}
+
 func (r *ProductPostgres) Filter(filters models.ProductFilters, page int, limit int) ([]models.Product, int64) {
 	var products []models.Product
 	var total int64
 
-	r.db.Scopes(TitleFilter(filters.Title), BrandFilter(filters.BrandID)).Find(&products).Limit(limit).Offset(page * limit)
+	r.db.Scopes(TitleFilter(filters.Title), BrandFilter(filters.BrandID), SortFilter(filters.SortCriterion)).Find(&products).Limit(limit).Offset(page * limit)
 
-	r.db.Find(&models.Product{}).Count(&total)
+	r.db.Scopes(TitleFilter(filters.Title), BrandFilter(filters.BrandID),
+		SortFilter(filters.SortCriterion)).Find(&models.Product{}).Count(&total)
 
 	return products, total
 }

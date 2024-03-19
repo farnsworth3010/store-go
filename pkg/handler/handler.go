@@ -37,6 +37,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			blog.PATCH("/", h.userIdentity, h.updateBlog)
 			blog.DELETE("/:id", h.userIdentity, h.deleteBlog)
 		}
+		brand := api.Group("/brand")
+		{
+			brand.POST("/", h.userIdentity, h.createBrand)
+			brand.GET("/", h.getBrand)
+			brand.PATCH("/", h.userIdentity, h.updateBrand)
+			brand.DELETE("/:id", h.userIdentity, h.deleteBrand)
+		}
 		product := api.Group("/product")
 		{
 			product.GET("/brands", h.getBrands)

@@ -20,6 +20,13 @@ type Blog interface {
 	Delete(ID uint)
 }
 
+type Brand interface {
+	Get() ([]models.Brand, int64)
+	Create(brand models.CreateBrandParams) (uint, error)
+	Update(brand models.EditBrandParams) error
+	Delete(ID uint)
+}
+
 type Product interface {
 	Get(page int, limit int) ([]models.Product, int64)
 	GetById(ID uint) models.Product
@@ -27,7 +34,7 @@ type Product interface {
 	Create(product models.Product) (uint, error)
 	Delete(ID uint)
 	Update(product models.Product) error
-	GetCategories() ([]models.Category, error)
+	GetCategories() ([]models.CategoryResponse, error)
 	UpdateCategory(ID uint, newName string) error
 	DeleteCategory(ID uint) error
 	AddCategory(name string) (uint, error)
@@ -48,6 +55,7 @@ type Service struct {
 	Blog
 	Panel
 	Product
+	Brand
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -56,5 +64,6 @@ func NewService(repos *repository.Repository) *Service {
 		Blog:          NewBlogService(repos.Blog),
 		Product:       NewProductService(repos.Product),
 		Panel:         NewPanelService(repos.Panel),
+		Brand:         NewBrandService(repos.Brand),
 	}
 }

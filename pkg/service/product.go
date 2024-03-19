@@ -32,7 +32,7 @@ func (s *ProductService) GetById(id uint) models.Product {
 	return s.repo.GetById(id)
 }
 
-func (s *ProductService) GetCategories() ([]models.Category, error) {
+func (s *ProductService) GetCategories() ([]models.CategoryResponse, error) {
 	return s.repo.GetCategories()
 }
 func (s *ProductService) UpdateCategory(ID uint, newName string) error {

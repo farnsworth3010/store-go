@@ -20,13 +20,20 @@ type Blog interface {
 	Update(blog models.EditBlogParams) error
 }
 
+type Brand interface {
+	Get() ([]models.Brand, int64)
+	Create(brand models.CreateBrandParams) (uint, error)
+	Update(brand models.EditBrandParams) error
+	Delete(ID uint)
+}
+
 type Product interface {
 	Get(page int, limit int) ([]models.Product, int64)
 	GetById(id uint) models.Product
 	Latest() []models.Product
 	Create(product models.Product) (uint, error)
 	Delete(ID uint)
-	GetCategories() ([]models.Category, error)
+	GetCategories() ([]models.CategoryResponse, error)
 	UpdateCategory(ID uint, newName string) error
 	DeleteCategory(ID uint) error
 	AddCategory(name string) (uint, error)
@@ -48,8 +55,15 @@ type Repository struct {
 	Blog
 	Panel
 	Product
+	Brand
 }
 
 func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{Blog: NewBlogPostgres(db), Product: NewProductPostgres(db), Authorization: NewAuthPostgres(db), Panel: NewPanelPostgres(db)}
+	return &Repository{
+		Blog:          NewBlogPostgres(db),
+		Product:       NewProductPostgres(db),
+		Authorization: NewAuthPostgres(db),
+		Panel:         NewPanelPostgres(db),
+		Brand:         NewBrandPostgres(db),
+	}
 }

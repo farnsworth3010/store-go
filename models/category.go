@@ -2,11 +2,22 @@ package models
 
 import "gorm.io/gorm"
 
+type CategoryResponse struct {
+	Id            int              `json:"category_id"`
+	CategoryName  string           `json:"category_name"`
+	Subcategories []SubcategoryArr `json:"subcategories" gorm:"foreignKey:CategoryID"`
+}
+
 type Category struct {
 	gorm.Model
 	Name string `json:"name" binding:"required"`
 }
 
+type SubcategoryArr struct {
+	Id         int
+	Name       string
+	CategoryID int
+}
 type Subcategory struct {
 	gorm.Model
 	Name       string

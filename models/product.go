@@ -21,9 +21,10 @@ type Product struct {
 }
 
 type ProductFilters struct {
-	Title   string `json:"title"`
-	Price   int    `json:"price"`
-	BrandID int    `json:"brand_id"`
+	Title         string `json:"title"`
+	Price         int    `json:"price"`
+	SortCriterion int    `json:"sort_criterion"`
+	BrandID       int    `json:"brand_id"`
 }
 
 type SearchProductInput struct {
