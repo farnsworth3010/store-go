@@ -1,6 +1,6 @@
-port: "8082"
+port: "8089"
 db:
-  host: "localhost"
+  host: "s-store-db"
   username: "postgres"
   dbname: "postgres"
   sslmode: "disable"
